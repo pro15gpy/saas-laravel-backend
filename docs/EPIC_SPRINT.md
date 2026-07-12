@@ -1,22 +1,60 @@
 # EPIC & SPRINT PLAN - Laravel SaaS Boilerplate
 
 **Project**: Laravel SaaS Boilerplate (Open Source Free Tier)  
-**Timeline**: 8 Weeks (2 Months)  
+**Timeline**: 10 Weeks (2.5 Months) - *Extended for TALL Stack & Modular Architecture*  
 **Methodology**: Agile Scrum (1-Week Sprints)  
-**Version**: 1.0.0
+**Version**: 2.0.0 (TALL Stack Edition)  
+**Tech Stack**: **TALL** (TailwindCSS, Alpine.js, Laravel, Livewire)  
+**Architecture**: Modular, Pluggable, Reusable Components  
 
 ---
 
-## 1. EPIC OVERVIEW
+## 0. KEY ARCHITECTURAL DECISIONS
+
+### 🎨 TALL Stack Implementation
+- **TailwindCSS**: Utility-first styling dengan custom config untuk theming
+- **Alpine.js**: Interaktivitas ringan untuk dropdown, modal, toggle
+- **Laravel 11**: Backend framework dengan fitur terbaru
+- **Livewire 3**: Full-stack components tanpa write JavaScript kompleks
+
+### 🧩 Modular & Pluggable Design
+- **Module Structure**: Setiap fitur utama (Auth, Billing, Tenancy, Team) dalam directory terpisah
+- **Plugin System**: Support untuk package tambahan via service provider registration
+- **Reusable Components**: Livewire components yang dapat digunakan di berbagai context
+- **Event-Driven**: Decoupled architecture menggunakan Laravel Events & Listeners
+
+### 📧 Notification System
+- **Email**: Laravel Mail dengan queue support (SMTP, SES, Mailgun)
+- **WhatsApp**: Gateway integration (Twilio/Fonnte/Wablas) dengan fallback email
+- **In-App**: Database notifications dengan real-time updates via Livewire polling
+
+### 👣 Onboarding Flow
+- **Wizard-style**: Step-by-step setup untuk tenant baru
+- **Checklist**: Progress tracking untuk fitur yang sudah dikonfigurasi
+- **Tooltips**: Interactive guide menggunakan driver.js atau similar
+- **Empty States**: UI yang informatif saat data masih kosong
+
+### 💳 Billing Modules
+- **Multi-Gateway**: Stripe, Paddle, Midtrans (regional), PayPal
+- **Plan Management**: Feature-based limits (users, projects, storage)
+- **Usage Tracking**: Metered billing support
+- **Dunning**: Automated retry logic untuk failed payments
+- **Tax Handling**: Automatic tax calculation based on location
+
+---
+
+## 1. EPIC OVERVIEW (UPDATED)
 
 | Epic ID | Epic Name | Description | Priority | Estimated Duration |
 | :--- | :--- | :--- | :--- | :--- |
-| **E-01** | **Foundation & Auth** | Setup repositori, konfigurasi dasar Laravel, sistem autentikasi lengkap (Email, Social, 2FA). | P0 (Critical) | Sprint 1-2 |
-| **E-02** | **Multi-Tenancy Core** | Implementasi arsitektur multi-tenant (Single DB, Scoped), routing subdomain, dan isolasi data. | P0 (Critical) | Sprint 3-4 |
-| **E-03** | **Billing & Subscription** | Integrasi Payment Gateway (Stripe/Paddle), manajemen plan, webhook handling, dan trial logic. | P0 (Critical) | Sprint 3-5 |
-| **E-04** | **RBAC & Team Mgmt** | Sistem Role-Based Access Control, manajemen tim, invitasi member, dan permission granular. | P1 (High) | Sprint 5-6 |
-| **E-05** | **Admin & Observability** | Super Admin Dashboard, activity logging, notification system, dan monitoring setup. | P1 (High) | Sprint 6-7 |
-| **E-06** | **Polish & Launch** | Dokumentasi final, testing menyeluruh, CI/CD pipeline, dan rilis publik ke GitHub. | P2 (Medium) | Sprint 8 |
+| **E-01** | **Foundation & TALL Setup** | Setup repositori modular, konfigurasi TALL Stack, komponen Livewire reusable, struktur database. | P0 (Critical) | Sprint 1-2 |
+| **E-02** | **Auth & Onboarding** | Sistem autentikasi lengkap + User onboarding wizard dengan checklist interaktif. | P0 (Critical) | Sprint 2-3 |
+| **E-03** | **Multi-Tenancy Core** | Implementasi arsitektur multi-tenant modular (Single DB, Scoped), routing subdomain, isolasi data. | P0 (Critical) | Sprint 4-5 |
+| **E-04** | **Billing & Subscription** | Multi-gateway payment (Stripe/Paddle/Midtrans), manajemen plan, usage tracking, dunning management. | P0 (Critical) | Sprint 5-7 |
+| **E-05** | **Notification Hub** | Unified notification system: Email, WhatsApp Gateway, In-App dengan preference management. | P1 (High) | Sprint 6-7 |
+| **E-06** | **RBAC & Team Mgmt** | Sistem Role-Based Access Control modular, manajemen tim, invitasi member, permission granular. | P1 (High) | Sprint 7-8 |
+| **E-07** | **Admin & Observability** | Super Admin Dashboard, activity logging, monitoring setup, analytics dasar. | P1 (High) | Sprint 8-9 |
+| **E-08** | **Polish, Docs & Launch** | Dokumentasi final, testing menyeluruh, CI/CD pipeline, plugin documentation, rilis publik. | P2 (Medium) | Sprint 10 |
 
 ---
 
@@ -165,26 +203,158 @@ Sebuah task dianggap "Done" jika:
 4.  Tidak ada bug kritis yang diketahui.
 5.  Dokumentasi (jika perlu) sudah diupdate.
 6.  Kode mengikuti standar PSR-12 dan style guide project.
+7.  **TALL Stack Compliance**: Livewire components tested, Alpine.js interactivity working, Tailwind responsive.
+8.  **Modular Design**: Code placed in correct module directory, service providers registered properly.
 
 ---
 
-## 5. RISK MANAGEMENT
+## 5. RISK MANAGEMENT (UPDATED)
 
 | Risk | Impact | Probability | Mitigation Strategy |
 | :--- | :--- | :--- | :--- |
-| **Complexity of Tenancy** | High | High | Gunakan package proven (seperti `stancl/tenancy`) atau stick to simple single-db scoping di awal. |
+| **Complexity of Tenancy** | High | High | Gunakan package proven (`stancl/tenancy`) atau stick to simple single-db scoping di awal. |
 | **Payment Gateway Issues** | High | Medium | Gunakan Sandbox mode extensively; Siapkan fallback manual verification. |
-| **Scope Creep** | Medium | High | Strictly follow MVP features; Move "nice-to-have" to v1.1 backlog. |
+| **WhatsApp Gateway Reliability** | Medium | Medium | Implement fallback to email; Use multiple gateway providers (Twilio + Fonnte). |
+| **TALL Stack Learning Curve** | Medium | Medium | Provide documentation & examples; Use official Livewire/Tailwind docs as reference. |
+| **Module Coupling** | High | Medium | Enforce strict module boundaries; Use events for cross-module communication. |
+| **Scope Creep** | Medium | High | Strictly follow MVP features; Move "nice-to-have" to v2.1 backlog. |
 | **Burnout** | High | Medium | Maintain sustainable pace; Jangan lembur di Sprint 1-2. |
 
 ---
 
 ## 6. BACKLOG (Post-Launch Ideas)
 
-Fitur yang ditunda untuk v1.1 dan seterusnya:
+Fitur yang ditunda untuk v2.1 dan seterusnya:
 - [ ] Multi-language support (i18n).
 - [ ] White-labeling (Custom domain per tenant).
 - [ ] Advanced Analytics Dashboard.
-- [ ] Marketplace/Plugin System.
+- [ ] Marketplace/Plugin System with revenue sharing.
 - [ ] GraphQL API Support.
 - [ ] Mobile App (Flutter/React Native) starter kit.
+- [ ] AI-powered features (chatbot, content generation).
+- [ ] Advanced workflow automation (Zapier-like).
+- [ ] Custom field builder for tenants.
+- [ ] SSO (SAML/OIDC) for enterprise tenants.
+
+---
+
+## 7. MODULE STRUCTURE REFERENCE
+
+```
+modules/
+├── Auth/
+│   ├── Http/
+│   │   ├── Livewire/
+│   │   └── Controllers/
+│   ├── Models/
+│   ├── Services/
+│   ├── Views/
+│   └── AuthServiceProvider.php
+├── Tenants/
+│   ├── Http/
+│   │   ├── Livewire/
+│   │   └── Middleware/
+│   ├── Models/
+│   ├── Scopes/
+│   ├── Services/
+│   └── TenantsServiceProvider.php
+├── Billing/
+│   ├── Http/
+│   │   ├── Livewire/
+│   │   └── Webhooks/
+│   ├── Models/
+│   ├── Gateways/
+│   ├── Services/
+│   └── BillingServiceProvider.php
+├── Notifications/
+│   ├── Channels/
+│   ├── Http/
+│   ├── Models/
+│   ├── Services/
+│   └── NotificationsServiceProvider.php
+├── Team/
+│   ├── Http/
+│   ├── Models/
+│   ├── Policies/
+│   └── TeamServiceProvider.php
+└── Admin/
+    ├── Http/
+    ├── Models/
+    └── AdminServiceProvider.php
+```
+
+---
+
+## 8. TECH STACK DETAILS
+
+### Frontend (TALL)
+- **TailwindCSS v3.x**: Utility-first CSS dengan custom config
+- **Alpine.js v3.x**: Lightweight JavaScript untuk interaktivitas
+- **Livewire v3.x**: Full-stack reactive components
+- **Vite**: Build tool untuk asset compilation
+
+### Backend
+- **Laravel 11.x**: PHP Framework
+- **PHP 8.2+**: Language version
+- **MySQL 8.x / PostgreSQL 15.x**: Database
+- **Redis 7.x**: Cache & Queue driver
+
+### Packages (Recommended)
+- `spatie/laravel-permission`: RBAC
+- `spatie/laravel-activitylog`: Audit logging
+- `laravel/cashier-stripe` / `laravel/cashier-paddle`: Billing
+- `bacon/bacon-qr-code`: 2FA QR generation
+- `laravel/socialite`: Social authentication
+- `pestphp/pest`: Testing framework
+
+### Infrastructure
+- **Docker & Docker Compose**: Containerization
+- **GitHub Actions**: CI/CD
+- **Sentry / Logflare**: Error tracking
+- **Plausible / PostHog**: Analytics (optional)
+
+---
+
+## 9. SUCCESS METRICS
+
+### Technical Metrics
+- ✅ Test coverage > 80%
+- ✅ Lighthouse score > 90 (Performance, Accessibility, SEO)
+- ✅ Page load time < 2 seconds
+- ✅ API response time < 200ms (p95)
+- ✅ Zero critical security vulnerabilities
+
+### Business Metrics (for adopters)
+- ⏱️ Time-to-first-deployment < 30 minutes
+- 📦 Number of modules included: 6 core modules
+- 🔌 Plugin system: Working with example plugin
+- 📚 Documentation completeness: All modules documented
+- 👥 Community adoption: 100+ GitHub stars in first month
+
+---
+
+## 10. RELEASE CHECKLIST
+
+### Pre-Launch (Sprint 10)
+- [ ] All tests passing (CI green)
+- [ ] Code review completed for all modules
+- [ ] Security audit (dependencies, code scan)
+- [ ] Documentation complete (README, modules, API)
+- [ ] `.env.example` updated dengan semua variables
+- [ ] Demo instance deployed & accessible
+- [ ] Changelog written (CHANGELOG.md)
+
+### Launch Day
+- [ ] Tag release v2.0.0
+- [ ] Publish to GitHub Releases
+- [ ] Submit to Product Hunt
+- [ ] Blog post published
+- [ ] Social media announcement (Twitter, LinkedIn, Dev.to, Reddit)
+- [ ] Discord/Slack community notified
+
+### Post-Launch (Week 1-2)
+- [ ] Monitor GitHub Issues & PRs
+- [ ] Respond to community questions
+- [ ] Collect feedback for v2.1
+- [ ] Track analytics (stars, forks, clones)
+- [ ] Plan first maintenance release (v2.0.1)
