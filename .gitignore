@@ -1,3 +1,5 @@
-# Documentation files are source files and should not be ignored
-# No build artifacts, dependencies, or temp files detected in changes
-# Output remains empty as only documentation/source files are present
+(docs/EPIC_SPRINT.md is a markdown documentation file, which is source/config file type)
+
+```markdown
+
+```
