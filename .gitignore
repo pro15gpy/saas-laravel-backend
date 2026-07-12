@@ -1,1 +1,12 @@
-(docs/EPIC_SPRINT.md is a source/config file, and there are no build artifacts, dependencies, or temp files in the changes)
+```
+# Environment
+.env.local
+.env.
+
+# Logs and temp files
+*.log
+*.tmp
+
+# Editors
+.vscode/
+```
