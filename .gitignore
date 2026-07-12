@@ -1,5 +1,1 @@
-(docs/EPIC_SPRINT.md is a markdown documentation file, which is source/config file type)
-
-```markdown
-
-```
+(docs/EPIC_SPRINT.md is a source/config file, and there are no build artifacts, dependencies, or temp files in the changes)
